@@ -61,8 +61,8 @@ function splitIntoWords(str, sourceCase) {
         case CASE_TYPES.CAMEL:
         case CASE_TYPES.PASCAL:
             return str
-                .replace(/([A-Z])/g, ' $1')
-                .replace(/([0-9])/g, ' $1')
+                .replace(/(?<![A-Z])([A-Z])/g, ' $1')
+                .replace(/(?<![0-9])([0-9])/g, ' $1')
                 .trim()
                 .toLowerCase()
                 .split(' ')
@@ -83,7 +83,8 @@ function splitIntoWords(str, sourceCase) {
 
         default:
             return str
-                .replace(/([A-Z])/g, ' $1')
+                .replace(/(?<![A-Z])([A-Z])/g, ' $1')
+                .replace(/(?<![0-9])([0-9])/g, ' $1')
                 .replace(/[-_\.]/g, ' ')
                 .replace(/\s+/g, ' ')
                 .trim()
