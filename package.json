@@ -1,0 +1,38 @@
+{
+    "name": "str-case-converter",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "A utility for converting strings between different case formats.",
+    "main": "index.js",
+    "scripts": {
+        "test": "jest"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Julien-Ba/str-case-converter.git"
+    },
+    "keywords": [
+        "string",
+        "case",
+        "converter",
+        "camelcase",
+        "pascalcase",
+        "snakecase",
+        "kebabcase",
+        "constantcase",
+        "titlecase",
+        "dotcase",
+        "formatter",
+        "transform",
+        "conversion",
+        "text",
+        "format",
+        "string-manipulation"
+    ],
+    "author": "Julien-Ba",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Julien-Ba/str-case-converter/issues"
+    },
+    "homepage": "https://github.com/Julien-Ba/str-case-converter"
+}
