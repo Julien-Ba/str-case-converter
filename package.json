@@ -1,6 +1,6 @@
 {
     "name": "str-case-converter",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "type": "module",
     "description": "A utility for converting strings between different case formats.",
     "main": "index.js",
