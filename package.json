@@ -1,12 +1,12 @@
 {
     "name": "str-case-converter",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "type": "module",
     "description": "A utility for converting strings between different case formats.",
     "main": "index.js",
     "types": "index.d.ts",
     "scripts": {
-        "test": "jest"
+        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
     },
     "repository": {
         "type": "git",
@@ -35,5 +35,10 @@
     "bugs": {
         "url": "https://github.com/Julien-Ba/str-case-converter/issues"
     },
-    "homepage": "https://github.com/Julien-Ba/str-case-converter"
+    "homepage": "https://github.com/Julien-Ba/str-case-converter",
+    "devDependencies": {
+        "@babel/preset-env": "^7.26.0",
+        "babel-jest": "^29.7.0",
+        "jest": "^29.7.0"
+    }
 }
