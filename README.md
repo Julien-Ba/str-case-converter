@@ -94,7 +94,7 @@ convertString.capitalize(str); // Capitalize the first character
 -   The first argument will always be converted into a string.
 -   The second argument will allow you to skip the detect function no matter what and will be compared to valid case names
 
-````javascript
+```javascript
 // destructuring
 const { toCamel } = convertString;
 ['hello-world', 'foo-bar'].map((str) => toCamel(str));
@@ -106,7 +106,10 @@ toCamel('AR3_y0u-GONNA break Yet?', null); // 'ar3Y0uGonnaBreakYet?'
 convertString.toConstant(undefined, {}); // 'UNDEFINED'
 
 // control the output with the case format
-convertString.toSnake('If I useTitle-case as an argument, it will only remove spaces/uppercases', 'title');
+convertString.toSnake(
+    'If I useTitle-case as an argument, it will only remove spaces/uppercases',
+    'title'
+);
 // if_i_usetitle-case_as_an_argument,_it_will_only_remove_spaces/uppercases
 ```
 
@@ -117,4 +120,3 @@ MIT
 ## Issues
 
 If you find a bug or have a suggestion, please file an issue on [GitHub](https://github.com/Julien-Ba/str-case-converter/issues).
-````
