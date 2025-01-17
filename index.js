@@ -9,6 +9,9 @@
  * - CONSTANT_CASE: 'HELLO_WORLD'
  * - Title Case: 'Hello World'
  * - dot.case: 'hello.world'
+ * - no case: 'hello world'
+ * - Sentence case: 'Hello world'
+ * - path/case: 'hello/world'
  *
  * @example
  * // Basic usage (auto-detects source case)
@@ -17,11 +20,12 @@
  *
  * // With source case parameter for better performance
  * convertString.toCamel('Hello World', 'title')    // 'helloWorld'
- * convertString.toSnake('HelloWorld', 'pascal')    // 'foo_bar'
+ * convertString.toSnake('HelloWorld', 'pascal')    // 'hello_world'
  *
  * // Utility methods
  * convertString.detect('helloWorld')     // 'camel'
  * convertString.toArray('hello-world')   // ['hello', 'world']
+ * convertString.capitalize('hello')       // 'Hello'
  */
 
 const CASE_TYPES = {
@@ -32,6 +36,9 @@ const CASE_TYPES = {
     CONSTANT: 'constant',
     TITLE: 'title',
     DOT: 'dot',
+    NO: 'no',
+    SENTENCE: 'sentence',
+    PATH: 'path',
 };
 
 /**
@@ -47,6 +54,9 @@ function detectCase(str) {
     if (/^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$/.test(str)) return CASE_TYPES.CONSTANT;
     if (/^[a-z][a-z0-9]*(\.[a-z0-9]+)*$/.test(str)) return CASE_TYPES.DOT;
     if (/^[A-Z][a-z]*(\s[A-Z][a-z]*)*$/.test(str)) return CASE_TYPES.TITLE;
+    if (/^[a-z][a-z0-9]*(\s[a-z0-9]+)*$/.test(str)) return CASE_TYPES.NO;
+    if (/^[A-Z][a-z0-9]*(\s[a-z0-9]+)*$/.test(str)) return CASE_TYPES.SENTENCE;
+    if (/^[a-z][a-z0-9]*(\/[a-z0-9]+)*$/.test(str)) return CASE_TYPES.PATH;
     return null;
 }
 
@@ -69,17 +79,26 @@ function splitIntoWords(str, sourceCase) {
                 .filter(Boolean);
 
         case CASE_TYPES.SNAKE:
-        case CASE_TYPES.CONSTANT:
-            return str.toLowerCase().split('_').filter(Boolean);
+            return str.split('_').filter(Boolean);
 
         case CASE_TYPES.KEBAB:
             return str.split('-').filter(Boolean);
+
+        case CASE_TYPES.CONSTANT:
+            return str.toLowerCase().split('_').filter(Boolean);
 
         case CASE_TYPES.DOT:
             return str.split('.').filter(Boolean);
 
         case CASE_TYPES.TITLE:
+        case CASE_TYPES.SENTENCE:
             return str.toLowerCase().split(' ').filter(Boolean);
+
+        case CASE_TYPES.NO:
+            return str.split(' ').filter(Boolean);
+
+        case CASE_TYPES.PATH:
+            return str.split('/').filter(Boolean);
 
         default:
             return str
@@ -107,17 +126,26 @@ function convertToArray(str, sourceCase) {
 }
 
 /**
+ * Capitalize the first character of a string
+ * @param {string} str - Input string
+ * @returns {string} The string capitalized
+ */
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+/**
  * String conversion utility object with methods for each case type
  */
 export const convertString = {
     toCamel: (str, sourceCase) => {
         return convertToArray(str, sourceCase)
-            .map((word, i) => (i === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1)))
+            .map((word, i) => (i === 0 ? word : capitalize(word)))
             .join('');
     },
     toPascal: (str, sourceCase) => {
         return convertToArray(str, sourceCase)
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .map((word) => capitalize(word))
             .join('');
     },
     toSnake: (str, sourceCase) => {
@@ -131,12 +159,23 @@ export const convertString = {
     },
     toTitle: (str, sourceCase) => {
         return convertToArray(str, sourceCase)
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .map((word) => capitalize(word))
             .join(' ');
     },
     toDot: (str, sourceCase) => {
         return convertToArray(str, sourceCase).join('.');
     },
+    toNo: (str, sourceCase) => {
+        return convertToArray(str, sourceCase).join(' ');
+    },
+    toSentence: (str, sourceCase) => {
+        const words = convertToArray(str, sourceCase);
+        return words.map((word, i) => (i === 0 ? capitalize(word) : word)).join(' ');
+    },
+    toPath: (str, sourceCase) => {
+        return convertToArray(str, sourceCase).join('/');
+    },
     detect: detectCase,
     toArray: convertToArray,
+    capitalize: capitalize,
 };

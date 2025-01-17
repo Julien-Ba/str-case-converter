@@ -1,4 +1,14 @@
-type CaseType = 'camel' | 'pascal' | 'snake' | 'kebab' | 'constant' | 'title' | 'dot';
+type CaseType =
+    | 'camel'
+    | 'pascal'
+    | 'snake'
+    | 'kebab'
+    | 'constant'
+    | 'title'
+    | 'dot'
+    | 'no'
+    | 'sentence'
+    | 'path';
 
 interface ConvertString {
     /**
@@ -44,6 +54,34 @@ interface ConvertString {
     toTitle(str: string, sourceCase?: CaseType): string;
 
     /**
+     * Converts a string to dot.case
+     * @param str - The string to convert
+     * @param sourceCase - Optional source case type
+     */
+    toDot(str: string, sourceCase?: CaseType): string;
+
+    /**
+     * Converts a string to no case
+     * @param str - The string to convert
+     * @param sourceCase - Optional source case type
+     */
+    toNo(str: string, sourceCase?: CaseType): string;
+
+    /**
+     * Converts a string to Sentence case
+     * @param str - The string to convert
+     * @param sourceCase - Optional source case type
+     */
+    toSentence(str: string, sourceCase?: CaseType): string;
+
+    /**
+     * Converts a string to path/case
+     * @param str - The string to convert
+     * @param sourceCase - Optional source case type
+     */
+    toPath(str: string, sourceCase?: CaseType): string;
+
+    /**
      * Detects the case type of a string
      * @param str - The string to analyze
      */
@@ -54,6 +92,12 @@ interface ConvertString {
      * @param str - The string to convert
      */
     toArray(str: string): string[];
+
+    /**
+     * Capitalize the first letter of a word
+     * @param str - The string to convert
+     */
+    capitalize(str: string): string;
 }
 
 export const convertString: ConvertString;

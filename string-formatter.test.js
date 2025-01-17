@@ -30,8 +30,20 @@ describe('convertString', () => {
             expect(convertString.detect('hello.world')).toBe('dot');
         });
 
+        test('detects no case', () => {
+            expect(convertString.detect('hello world')).toBe('no');
+        });
+
+        test('detects Sentence case', () => {
+            expect(convertString.detect('Hello world')).toBe('sentence');
+        });
+
+        test('detects path/case', () => {
+            expect(convertString.detect('hello/world')).toBe('path');
+        });
+
         test('returns null for unknown format', () => {
-            expect(convertString.detect('hello.WORLD_stuff-things')).toBe(null);
+            expect(convertString.detect('hello.WORLD_foo-bar')).toBe(null);
         });
     });
 
@@ -72,10 +84,28 @@ describe('convertString', () => {
             expect(convertString.toTitle('HELLO_WORLD', 'constant')).toBe('Hello World');
         });
 
-        test('converts to Dot Case', () => {
+        test('converts to dot.case', () => {
             expect(convertString.toDot('hello_world')).toBe('hello.world');
             expect(convertString.toDot('Hello World')).toBe('hello.world');
             expect(convertString.toDot('HelloWorld', 'pascal')).toBe('hello.world');
+        });
+
+        test('converts to no case', () => {
+            expect(convertString.toNo('hello-world')).toBe('hello world');
+            expect(convertString.toNo('hello/world')).toBe('hello world');
+            expect(convertString.toNo('Hello world', 'sentence')).toBe('hello world');
+        });
+
+        test('converts to Sentence case', () => {
+            expect(convertString.toSentence('HELLO_WORLD')).toBe('Hello world');
+            expect(convertString.toSentence('hello.world')).toBe('Hello world');
+            expect(convertString.toSentence('hello world', 'no')).toBe('Hello world');
+        });
+
+        test('converts to path/case', () => {
+            expect(convertString.toPath('helloWorld')).toBe('hello/world');
+            expect(convertString.toPath('hello world')).toBe('hello/world');
+            expect(convertString.toPath('Hello World', 'title')).toBe('hello/world');
         });
     });
 
@@ -89,13 +119,34 @@ describe('convertString', () => {
             expect(convertString.toKebab(123)).toBe('123');
             expect(convertString.toTitle(null)).toBe('Null');
             expect(convertString.toPascal(undefined)).toBe('Undefined');
+            expect(convertString.toCamel({})).toBe('[objectObject]');
+            expect(convertString.toDot([])).toBe('');
+            expect(convertString.toConstant(function () {})).toBe('FUNCTION_()_{}');
+            expect(convertString.toArray(() => {})).toEqual(['()', '=>', '{}']);
+            expect(convertString.toSnake(convertString.toCamel('hello world'))).toBe('hello_world');
         });
 
         test('handles mixed formats', () => {
-            const mixed = 'hello.WORLD_stuff-things';
-            const expected = ['hello', 'world', 'stuff', 'things'];
+            const mixed = 'hello.WORLD_foo-bar';
+            const expected = ['hello', 'world', 'foo', 'bar'];
             expect(convertString.toArray(mixed)).toEqual(expected);
             expect(convertString.toArray('openAI_WHO')).toEqual(['open', 'ai', 'who']);
+            expect(
+                convertString.toSnake(
+                    'If I useTitle-case as an argument, it will only remove spaces/uppercases',
+                    'title'
+                )
+            ).toBe('if_i_usetitle-case_as_an_argument,_it_will_only_remove_spaces/uppercases');
+        });
+
+        test('handle unknown cases', () => {
+            expect(convertString.toTitle('hello_world', 'yolo')).toBe('Hello World');
+            expect(convertString.detect('HELLO_WORLD', 'TPPI')).toBe('constant');
+            expect(convertString.toCamel('AR3_y0u-GONNA break Yet?', null)).toBe(
+                'ar3Y0uGonnaBreakYet?'
+            );
+            expect(convertString.toConstant(undefined, {})).toBe('UNDEFINED');
+            expect(convertString.toNo('', '')).toBe('');
         });
     });
 });
